@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="1. 简介处理一段业务逻辑，首先要确保数据输入的正确性，所以需要先对数据进行检查，保证数据在语义上的正确性，再根据数据进行下一步的处理。前端可以通过 js 程序校验数据是否合法，后端同样也需要进行校验。而后端最简单的实现就是直接在业务方法中对数据进行处理，但是不同的业务方法可能会出现同样的校验操作，这样就出现了数据的冗余。为了解决这个情况，JSR 303 出现了。JSR 303 使用 Bean V">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JSR303校验">
+<meta property="og:url" content="http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1. 简介处理一段业务逻辑，首先要确保数据输入的正确性，所以需要先对数据进行检查，保证数据在语义上的正确性，再根据数据进行下一步的处理。前端可以通过 js 程序校验数据是否合法，后端同样也需要进行校验。而后端最简单的实现就是直接在业务方法中对数据进行处理，但是不同的业务方法可能会出现同样的校验操作，这样就出现了数据的冗余。为了解决这个情况，JSR 303 出现了。JSR 303 使用 Bean V">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-08-29T06:39:47.006Z">
+<meta property="article:modified_time" content="2021-09-06T02:59:47.077Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="JSR303校验">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>JSR303校验</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wixhz">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2021/09/09/SQL%20%E8%AF%AD%E6%B3%95-sql%E8%AF%AD%E6%B3%95/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2021/08/29/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&text=JSR303校验"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&title=JSR303校验"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&is_video=false&description=JSR303校验"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=JSR303校验&body=Check out this article: http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&title=JSR303校验"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&title=JSR303校验"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&title=JSR303校验"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&title=JSR303校验"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&name=JSR303校验&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&t=JSR303校验"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1. 简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-springboot%E4%B8%ADJSR%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">2. springboot中JSR的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1%E5%BC%95%E5%85%A5%E4%BE%9D%E8%B5%96"><span class="toc-number">2.1.</span> <span class="toc-text">2.1引入依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AA%E9%9C%80%E8%A6%81%E6%A0%A1%E9%AA%8C%E7%9A%84java-Bean%EF%BC%8C%E9%80%9A%E8%BF%87%E6%A0%A1%E9%AA%8C%E6%B3%A8%E8%A7%A3%E8%BF%9B%E8%A1%8C%E5%AF%B9%E5%BA%94%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 构建一个需要校验的java Bean，通过校验注解进行对应的操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E6%B7%BB%E5%8A%A0-Valid-%E5%BC%80%E5%90%AF%E6%A0%A1%E9%AA%8C"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 添加 @Valid 开启校验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-BindResult-%E5%8F%AF%E9%80%89"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 BindResult(可选)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E5%AE%9A%E4%B9%89%E5%85%A8%E5%B1%80%E5%BC%82%E5%B8%B8%E7%B1%BB"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 定义全局异常类</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        JSR303校验
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-08-29T06:39:47.006Z" itemprop="datePublished">2021-08-29</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Java%E5%AE%9E%E6%88%98/">Java实战</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/JSR303%E6%A0%A1%E9%AA%8C/" rel="tag">JSR303校验</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1. 简介"></a>1. 简介</h1><p>处理一段业务逻辑，首先要确保数据输入的正确性，所以需要先对数据进行检查，保证数据在语义上的正确性，再根据数据进行下一步的处理。<br>前端可以通过 js 程序校验数据是否合法，后端同样也需要进行校验。而后端最简单的实现就是直接在业务方法中对数据进行处理，但是不同的业务方法可能会出现同样的校验操作，这样就出现了数据的冗余。为了解决这个情况，JSR 303 出现了。<br>JSR 303 使用 Bean Validation，即在 Bean 上添加相应的注解，去实现数据校验。这样在执行业务方法前，都会根据注解对数据进行校验，从而减少自定义的校验逻辑，减少代码冗余。</p>
+<h1 id="2-springboot中JSR的使用"><a href="#2-springboot中JSR的使用" class="headerlink" title="2. springboot中JSR的使用"></a>2. springboot中JSR的使用</h1><h2 id="2-1引入依赖"><a href="#2-1引入依赖" class="headerlink" title="2.1引入依赖"></a>2.1引入依赖</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-validation&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-2-构建一个需要校验的java-Bean，通过校验注解进行对应的操作"><a href="#2-2-构建一个需要校验的java-Bean，通过校验注解进行对应的操作" class="headerlink" title="2.2 构建一个需要校验的java Bean，通过校验注解进行对应的操作"></a>2.2 构建一个需要校验的java Bean，通过校验注解进行对应的操作</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Null</span>    被注释的元素必须为 <span class="literal">null</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@NotNull</span>    被注释的元素必须不为 <span class="literal">null</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@AssertTrue</span>    被注释的元素必须为 <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@AssertFalse</span>    被注释的元素必须为 <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Min(value)</span>    被注释的元素必须是一个数字，其值必须大于等于指定的最小值</span><br><span class="line"></span><br><span class="line"><span class="meta">@Max(value)</span>    被注释的元素必须是一个数字，其值必须小于等于指定的最大值</span><br><span class="line"></span><br><span class="line"><span class="meta">@DecimalMin(value)</span>    被注释的元素必须是一个数字，其值必须大于等于指定的最小值</span><br><span class="line"></span><br><span class="line"><span class="meta">@DecimalMax(value)</span>    被注释的元素必须是一个数字，其值必须小于等于指定的最大值</span><br><span class="line"></span><br><span class="line"><span class="meta">@Size(max, min)</span>    被注释的元素的大小必须在指定的范围内</span><br><span class="line"></span><br><span class="line"><span class="meta">@Digits</span> (integer, fraction)    被注释的元素必须是一个数字，其值必须在可接受的范围内</span><br><span class="line"></span><br><span class="line"><span class="meta">@Past</span>    被注释的元素必须是一个过去的日期</span><br><span class="line"></span><br><span class="line"><span class="meta">@Future</span>    被注释的元素必须是一个将来的日期</span><br><span class="line"></span><br><span class="line"><span class="meta">@Pattern(value)</span>    被注释的元素必须符合指定的正则表达式</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="2-3-添加-Valid-开启校验"><a href="#2-3-添加-Valid-开启校验" class="headerlink" title="2.3 添加 @Valid 开启校验"></a>2.3 添加 @Valid 开启校验</h2><p>在请求方法中，使用校验注解@Valid，开启校验</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">@RequestMapping(&quot;/save&quot;)</span></span><br><span class="line">  <span class="keyword">public</span> R <span class="title function_">save</span><span class="params">(<span class="meta">@Valid</span> <span class="meta">@RequestBody</span> BrandEntity brand)</span>&#123;</span><br><span class="line">brandService.save(brand);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> R.ok();</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>想要自定义错误消息，可以覆盖默认的错误提示信息,在添加注解的时候，修改message：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@NotBlank(message = &quot;品牌名必须非空&quot;)</span></span><br><span class="line">	<span class="keyword">private</span> String name;</span><br></pre></td></tr></table></figure>
+<h2 id="2-4-BindResult-可选"><a href="#2-4-BindResult-可选" class="headerlink" title="2.4 BindResult(可选)"></a>2.4 BindResult(可选)</h2><p>给校验的Bean后，紧跟一个BindResult，就可以获取到校验的结果。加完以后，如果参数验证不通过，那就直接进入if语句里面，在语句里面做相应的返回结果.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/save&quot;)</span></span><br><span class="line">   <span class="keyword">public</span> R <span class="title function_">save</span><span class="params">(<span class="meta">@Valid</span> <span class="meta">@RequestBody</span> BrandEntity brand, BindingResult result)</span>&#123;</span><br><span class="line">       <span class="keyword">if</span>( result.hasErrors())&#123;</span><br><span class="line">           Map&lt;String,String&gt; map=<span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">           <span class="comment">//1.获取错误的校验结果</span></span><br><span class="line">           result.getFieldErrors().forEach((item)-&gt;&#123;</span><br><span class="line">               <span class="comment">//获取发生错误时的message</span></span><br><span class="line">               <span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> item.getDefaultMessage();</span><br><span class="line">               <span class="comment">//获取发生错误的字段</span></span><br><span class="line">               <span class="type">String</span> <span class="variable">field</span> <span class="operator">=</span> item.getField();</span><br><span class="line">               map.put(field,message);</span><br><span class="line">           &#125;);</span><br><span class="line">           <span class="keyword">return</span> R.error(<span class="number">400</span>,<span class="string">&quot;提交的数据不合法&quot;</span>).put(<span class="string">&quot;data&quot;</span>,map);</span><br><span class="line">       &#125;<span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">       &#125;</span><br><span class="line">	brandService.save(brand);</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> R.ok();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-5-定义全局异常类"><a href="#2-5-定义全局异常类" class="headerlink" title="2.5 定义全局异常类"></a>2.5 定义全局异常类</h2><p>使用Springboot所提供的@ControllerAdvice，通过“basePackages”能够说明处理哪些路径下的异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 集中处理所有异常</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@RestControllerAdvice(basePackages = &quot;com.bigdata..controller&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GulimallExceptionAdvice</span> &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@ExceptionHandler(value = Exception.class)</span></span><br><span class="line">    <span class="keyword">public</span> R <span class="title function_">handleValidException</span><span class="params">(MethodArgumentNotValidException exception)</span>&#123;</span><br><span class="line">        Map&lt;String,String&gt; map=<span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        <span class="type">BindingResult</span> <span class="variable">bindingResult</span> <span class="operator">=</span> exception.getBindingResult();</span><br><span class="line">        bindingResult.getFieldErrors().forEach(fieldError -&gt; &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">message</span> <span class="operator">=</span> fieldError.getDefaultMessage();</span><br><span class="line">            <span class="type">String</span> <span class="variable">field</span> <span class="operator">=</span> fieldError.getField();</span><br><span class="line">            map.put(field,message);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        log.error(<span class="string">&quot;数据校验出现问题&#123;&#125;,异常类型&#123;&#125;&quot;</span>,exception.getMessage(),exception.getClass());</span><br><span class="line">        <span class="keyword">return</span> R.error(<span class="number">400</span>,<span class="string">&quot;数据校验出现问题&quot;</span>).put(<span class="string">&quot;data&quot;</span>,map);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/wixhz">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1. 简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-springboot%E4%B8%ADJSR%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">2. springboot中JSR的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1%E5%BC%95%E5%85%A5%E4%BE%9D%E8%B5%96"><span class="toc-number">2.1.</span> <span class="toc-text">2.1引入依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AA%E9%9C%80%E8%A6%81%E6%A0%A1%E9%AA%8C%E7%9A%84java-Bean%EF%BC%8C%E9%80%9A%E8%BF%87%E6%A0%A1%E9%AA%8C%E6%B3%A8%E8%A7%A3%E8%BF%9B%E8%A1%8C%E5%AF%B9%E5%BA%94%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 构建一个需要校验的java Bean，通过校验注解进行对应的操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E6%B7%BB%E5%8A%A0-Valid-%E5%BC%80%E5%90%AF%E6%A0%A1%E9%AA%8C"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 添加 @Valid 开启校验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-BindResult-%E5%8F%AF%E9%80%89"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 BindResult(可选)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E5%AE%9A%E4%B9%89%E5%85%A8%E5%B1%80%E5%BC%82%E5%B8%B8%E7%B1%BB"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 定义全局异常类</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&text=JSR303校验"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&title=JSR303校验"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&is_video=false&description=JSR303校验"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=JSR303校验&body=Check out this article: http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&title=JSR303校验"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&title=JSR303校验"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&title=JSR303校验"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&title=JSR303校验"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&name=JSR303校验&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/08/29/JSR303%E6%A0%A1%E9%AA%8C-jsr303%E6%A0%A1%E9%AA%8C/&t=JSR303校验"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wixhz">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

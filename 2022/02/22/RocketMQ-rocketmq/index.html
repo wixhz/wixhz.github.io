@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="RocketMQ概述MQ，Message Queue，是一种提供消息队列服务的中间件，也称为消息中间件。消息即数据，一般消息的体量不会很大。简单来说，消息队列就是一种实现“先进先出”的一种数据结构。 用途：  应用解藕：上游系统对下游系统的调用若为同步调用，则会大大降低系统的吞吐量与并发度，且系统耦合度太高。 而异步调用则会解决这些问题。所以两层之间若要实现由同步到异步的转化，一般性做法就是，在这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RocketMQ">
+<meta property="og:url" content="http://example.com/2022/02/22/RocketMQ-rocketmq/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="RocketMQ概述MQ，Message Queue，是一种提供消息队列服务的中间件，也称为消息中间件。消息即数据，一般消息的体量不会很大。简单来说，消息队列就是一种实现“先进先出”的一种数据结构。 用途：  应用解藕：上游系统对下游系统的调用若为同步调用，则会大大降低系统的吞吐量与并发度，且系统耦合度太高。 而异步调用则会解决这些问题。所以两层之间若要实现由同步到异步的转化，一般性做法就是，在这">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-02-22T10:26:16.316Z">
+<meta property="article:modified_time" content="2022-03-04T07:43:00.652Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>RocketMQ</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wixhz">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/04/14/spring-spring/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2021/12/29/java%E5%AE%B9%E5%99%A8-java%E5%AE%B9%E5%99%A8/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2022/02/22/RocketMQ-rocketmq/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2022/02/22/RocketMQ-rocketmq/&text=RocketMQ"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2022/02/22/RocketMQ-rocketmq/&title=RocketMQ"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2022/02/22/RocketMQ-rocketmq/&is_video=false&description=RocketMQ"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RocketMQ&body=Check out this article: http://example.com/2022/02/22/RocketMQ-rocketmq/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2022/02/22/RocketMQ-rocketmq/&title=RocketMQ"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2022/02/22/RocketMQ-rocketmq/&title=RocketMQ"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2022/02/22/RocketMQ-rocketmq/&title=RocketMQ"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2022/02/22/RocketMQ-rocketmq/&title=RocketMQ"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2022/02/22/RocketMQ-rocketmq/&name=RocketMQ&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2022/02/22/RocketMQ-rocketmq/&t=RocketMQ"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#RocketMQ%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">RocketMQ概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#RocketMQ%E7%9A%84%E6%9E%B6%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">RocketMQ的架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.2.</span> <span class="toc-text">基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF-Message"><span class="toc-number">1.2.1.</span> <span class="toc-text">消息(Message)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E9%A2%98-Topic"><span class="toc-number">1.2.2.</span> <span class="toc-text">主题(Topic)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E7%AD%BE-Tag"><span class="toc-number">1.2.3.</span> <span class="toc-text">标签(Tag)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%9F%E5%88%97-Queue"><span class="toc-number">1.2.4.</span> <span class="toc-text">队列(Queue)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E6%A0%87%E8%AF%86-MessageId-x2F-Key"><span class="toc-number">1.2.5.</span> <span class="toc-text">消息标识(MessageId&#x2F;Key)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E8%B4%B9%E4%BD%8D%E7%A7%BB-offset"><span class="toc-number">1.2.6.</span> <span class="toc-text">消费位移(offset)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E5%88%86%E7%B1%BB"><span class="toc-number">1.3.</span> <span class="toc-text">消息分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81%E5%88%86%E7%B1%BB"><span class="toc-number">1.3.1.</span> <span class="toc-text">消息发送分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF"><span class="toc-number">1.3.2.</span> <span class="toc-text">顺序消息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%B6%E6%97%B6%E6%B6%88%E6%81%AF"><span class="toc-number">1.3.3.</span> <span class="toc-text">延时消息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF"><span class="toc-number">1.3.4.</span> <span class="toc-text">事务消息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E8%B4%B9%E9%97%AE%E9%A2%98"><span class="toc-number">1.4.</span> <span class="toc-text">消费问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%BA%E5%BA%8F%E6%B6%88%E8%B4%B9"><span class="toc-number">1.4.1.</span> <span class="toc-text">顺序消费</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9"><span class="toc-number">1.4.2.</span> <span class="toc-text">重复消费</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        RocketMQ
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-02-22T10:26:16.316Z" itemprop="datePublished">2022-02-22</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="RocketMQ概述"><a href="#RocketMQ概述" class="headerlink" title="RocketMQ概述"></a>RocketMQ概述</h1><p>MQ，Message Queue，是一种提供消息队列服务的中间件，也称为消息中间件。消息即数据，一般消息的体量不会很大。简单来说，消息队列就是一种实现“先进先出”的一种数据结构。</p>
+<p><strong>用途</strong>：</p>
+<ol>
+<li>应用解藕：上游系统对下游系统的调用若为同步调用，则会大大降低系统的吞吐量与并发度，且系统耦合度太高。 而异步调用则会解决这些问题。所以两层之间若要实现由同步到异步的转化，一般性做法就是，在这两 层间添加一个MQ层。</li>
+<li>流量消峰：MQ可以将系统的 超量 请求暂存其中，以便系统后期可以慢慢进行处理，从而避免了请求的丢失或系统被压垮。</li>
+<li>消息分发：数据的生产方只需要把各自的数据写入一个消息队列即可，数据使用方根据各自需求订阅感兴趣的数据，不同团队所订阅的数据互不干扰，也不必和数据产生方关联。</li>
+</ol>
+<h2 id="RocketMQ的架构"><a href="#RocketMQ的架构" class="headerlink" title="RocketMQ的架构"></a>RocketMQ的架构</h2><p>RocketMQ 技术架构中有四大角色 NameServer 、Broker 、Producer 、Consumer：</p>
+<ul>
+<li>Broker： 主要负责消息的存储、投递和查询以及服务高可用保证。说白了就是消息队列服务器，生产者生产消息到 Broker ，消费者从 Broker 拉取消息并消费。一个 Topic 分布在多个 Broker上，一个 Broker 可以配置多个 Topic ，它们是多对多的关系。 如果某个 Topic 消息量很大，应该给它多配置几个队列(上文中提到了提高并发能力)，并且 尽量多分布在不同 Broker 上，以减轻某个 Broker 的压力 。</li>
+<li>NameServer：Broker会将自己的信息注册到 NameServer 中，此时 NameServer 就存放了很多 Broker 的信息(Broker的路由表)，消费者和生产者就从 NameServer 中获取路由表然后照着路由表的信息和对应的 Broker 进行通信(生产者和消费者定期会向 NameServer 去查询相关的 Broker 的信息)。</li>
+<li>Producer： 消息发布的角色，支持分布式集群方式部署。</li>
+<li>Consumer： 消息消费的角色，支持分布式集群方式部署。支持以push推，pull拉两种模式对消息进行消费。同时也支持集群方式和广播方式的消费，它提供实时消息订阅机制。</li>
+</ul>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="消息-Message"><a href="#消息-Message" class="headerlink" title="消息(Message)"></a>消息(Message)</h3><p>消息是指，消息系统所传输信息的物理载体，生产和消费数据的最小单位，每条消息必须属于一个主题。</p>
+<h3 id="主题-Topic"><a href="#主题-Topic" class="headerlink" title="主题(Topic)"></a>主题(Topic)</h3><p>Topic表示一类消息的集合，每个主题包含若干条消息，每条消息只能属于一个主题，是RocketMQ进行消息订阅的基本单位。</p>
+<p>一个生产者可以同时发送多种Topic的消息;而一个消费者只对某种特定的Topic感兴趣，即只可以订阅和消费一种Topic的消息。</p>
+<p>每个主题中都有多个队列(分布在不同的Broker中，如果是集群的话，Broker又分布在不同的服务器中)，集群消费模式下，一个消费者集群多台机器共同消费一个 topic 的多个队列，一个队列只会被一个消费者消费。如果某个消费者挂掉，分组内其它消费者会接替挂掉的消费者继续消费。</p>
+<h3 id="标签-Tag"><a href="#标签-Tag" class="headerlink" title="标签(Tag)"></a>标签(Tag)</h3><p>为消息设置的标签，用于同一主题下区分不同类型的消息。来自同一业务单元的消息，可以根据不同业 务目的在同一主题下设置不同标签。标签能够有效地保持代码的清晰度和连贯性，并优化RocketMQ提 供的查询系统。消费者可以根据Tag实现对不同子主题的不同消费逻辑，实现更好的扩展性。</p>
+<p>Topic是消息的一级分类，Tag是消息的二级分类。</p>
+<h3 id="队列-Queue"><a href="#队列-Queue" class="headerlink" title="队列(Queue)"></a>队列(Queue)</h3><p>存储消息的物理实体。一个Topic中可以包含多个Queue，每个Queue中存放的就是该Topic的消息。</p>
+<p>一个Topic的Queue也被称为一个Topic中消息的分区(Partition)。 一个Topic的Queue中的消息只能被一个消费者组中的一个消费者消费。一个Queue中的消息不允许同一个消费者组中的多个消费者同时消费。</p>
+<h3 id="消息标识-MessageId-x2F-Key"><a href="#消息标识-MessageId-x2F-Key" class="headerlink" title="消息标识(MessageId&#x2F;Key)"></a>消息标识(MessageId&#x2F;Key)</h3><p>RocketMQ中每个消息拥有唯一的MessageId，且可以携带具有业务标识的Key，以方便对消息的查询。 不过需要注意的是，MessageId有两个:在生产者send()消息时会自动生成一个MessageId(msgId)， 当消息到达Broker后，Broker也会自动生成一个MessageId(offsetMsgId)。msgId、offsetMsgId与key都称为消息标识。</p>
+<h3 id="消费位移-offset"><a href="#消费位移-offset" class="headerlink" title="消费位移(offset)"></a>消费位移(offset)</h3><p>在发布订阅模式中一般会涉及到多个消费者组，而每个消费者组在每个队列中的消费位置都是不同的。如果此时有多个消费者组，那么消息被一个消费者组消费完之后是不会删除的(因为其它消费者组也需要呀)，它仅仅是为每个消费者组维护一个 消费位移(offset) ，每次消费者组消费完会返回一个成功的响应，然后队列再把维护的消费位移加一，这样就不会出现刚刚消费过的消息再一次被消费了。</p>
+<h2 id="消息分类"><a href="#消息分类" class="headerlink" title="消息分类"></a>消息分类</h2><h3 id="消息发送分类"><a href="#消息发送分类" class="headerlink" title="消息发送分类"></a>消息发送分类</h3><ol>
+<li>同步发送消息：Producer发出一条消息后，会在收到MQ返回的ACK之后才发下一条消息。该方式的消息可靠性最高，但消息发送效率太低。</li>
+<li>异步发送消息：Producer发出消息后无需等待MQ返回ACK，直接发送下一条消息。该方式的消息可靠性可以得到保障，消息发送效率也可以。</li>
+<li>单向发送消息：roducer仅负责发送消息，不等待、不处理MQ的ACK。该发送方式时MQ也不返回ACK。该方式的消息发送效率最高，但消息可靠性较差。</li>
+</ol>
+<h3 id="顺序消息"><a href="#顺序消息" class="headerlink" title="顺序消息"></a>顺序消息</h3><p>顺序消息指的是，严格按照消息的发送顺序进行消费的消息(FIFO)。</p>
+<p>默认情况下生产者会把消息以Round Robin轮询方式发送到不同的Queue分区队列;而消费消息时会从 多个Queue上拉取消息，这种情况下的发送和消费是不能保证顺序的。如果将消息仅发送到同一个 Queue中，消费时也只从这个Queue上拉取消息，就严格保证了消息的顺序性。</p>
+<hr>
+<p>根据有序范围的不同，RocketMQ可以严格地保证两种消息的有序性:分区有序与全局有序。</p>
+<ul>
+<li>当发送和消费参与的Queue只有一个时所保证的有序是整个Topic中消息的顺序，称为全局有序。</li>
+<li>如果有多个Queue参与，其仅可保证在该Queue分区队列上的消息顺序，则称为分区有序。</li>
+</ul>
+<h3 id="延时消息"><a href="#延时消息" class="headerlink" title="延时消息"></a>延时消息</h3><p>当消息写入到Broker后，在指定的时长后才可被消费处理的消息，称为延时消息。 </p>
+<p>采用RocketMQ的延时消息可以实现 定时任务 的功能，而无需使用定时器。典型的应用场景是，电商交易中超时未支付关闭订单的场景，12306平台订票超时未支付取消订票的场景。</p>
+<h3 id="事务消息"><a href="#事务消息" class="headerlink" title="事务消息"></a>事务消息</h3><h2 id="消费问题"><a href="#消费问题" class="headerlink" title="消费问题"></a>消费问题</h2><h3 id="顺序消费"><a href="#顺序消费" class="headerlink" title="顺序消费"></a>顺序消费</h3><p>RocketMQ 在主题上是无序的、它只有在队列层面才是保证有序的。将同一语义下的消息放入同一个队列，使用 <strong>Hash取模法</strong> 来保证同一个订单在同一个队列中。</p>
+<h3 id="重复消费"><a href="#重复消费" class="headerlink" title="重复消费"></a>重复消费</h3><p>幂等，在编程中一个幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。<br>可以通过写入 Redis 来保证，因为 Redis 的 key 和 value 就是天然支持幂等的。当然还有使用 数据库插入法 ，基于数据库的唯一键来保证重复数据不会被插入多条。 不过最主要的还是需要 根据特定场景使用特定的解决方案。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/wixhz">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#RocketMQ%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">RocketMQ概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#RocketMQ%E7%9A%84%E6%9E%B6%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">RocketMQ的架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.2.</span> <span class="toc-text">基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF-Message"><span class="toc-number">1.2.1.</span> <span class="toc-text">消息(Message)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E9%A2%98-Topic"><span class="toc-number">1.2.2.</span> <span class="toc-text">主题(Topic)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E7%AD%BE-Tag"><span class="toc-number">1.2.3.</span> <span class="toc-text">标签(Tag)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%9F%E5%88%97-Queue"><span class="toc-number">1.2.4.</span> <span class="toc-text">队列(Queue)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E6%A0%87%E8%AF%86-MessageId-x2F-Key"><span class="toc-number">1.2.5.</span> <span class="toc-text">消息标识(MessageId&#x2F;Key)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E8%B4%B9%E4%BD%8D%E7%A7%BB-offset"><span class="toc-number">1.2.6.</span> <span class="toc-text">消费位移(offset)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E5%88%86%E7%B1%BB"><span class="toc-number">1.3.</span> <span class="toc-text">消息分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81%E5%88%86%E7%B1%BB"><span class="toc-number">1.3.1.</span> <span class="toc-text">消息发送分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF"><span class="toc-number">1.3.2.</span> <span class="toc-text">顺序消息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BB%B6%E6%97%B6%E6%B6%88%E6%81%AF"><span class="toc-number">1.3.3.</span> <span class="toc-text">延时消息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF"><span class="toc-number">1.3.4.</span> <span class="toc-text">事务消息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E8%B4%B9%E9%97%AE%E9%A2%98"><span class="toc-number">1.4.</span> <span class="toc-text">消费问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%BA%E5%BA%8F%E6%B6%88%E8%B4%B9"><span class="toc-number">1.4.1.</span> <span class="toc-text">顺序消费</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9"><span class="toc-number">1.4.2.</span> <span class="toc-text">重复消费</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2022/02/22/RocketMQ-rocketmq/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2022/02/22/RocketMQ-rocketmq/&text=RocketMQ"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2022/02/22/RocketMQ-rocketmq/&title=RocketMQ"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2022/02/22/RocketMQ-rocketmq/&is_video=false&description=RocketMQ"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RocketMQ&body=Check out this article: http://example.com/2022/02/22/RocketMQ-rocketmq/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2022/02/22/RocketMQ-rocketmq/&title=RocketMQ"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2022/02/22/RocketMQ-rocketmq/&title=RocketMQ"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2022/02/22/RocketMQ-rocketmq/&title=RocketMQ"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2022/02/22/RocketMQ-rocketmq/&title=RocketMQ"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2022/02/22/RocketMQ-rocketmq/&name=RocketMQ&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2022/02/22/RocketMQ-rocketmq/&t=RocketMQ"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wixhz">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

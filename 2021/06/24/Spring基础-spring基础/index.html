@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="spring到底为什么要用 IoC 和 AOPIoC 解决了以下问题：  创建了许多重复对象，造成大量资源浪费； 更换实现类需要改动多个地方； 创建和配置组件工作繁杂，给组件调用方带来极大不便。  AOP 解决了以下问题：  切面逻辑编写繁琐，有多少个业务方法就需要编写多少次。  IOCIoC（Inverse of Control:控制反转） 是一种设计思想，而不是一个具体的技术实现。IoC 的思">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring基础">
+<meta property="og:url" content="http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="spring到底为什么要用 IoC 和 AOPIoC 解决了以下问题：  创建了许多重复对象，造成大量资源浪费； 更换实现类需要改动多个地方； 创建和配置组件工作繁杂，给组件调用方带来极大不便。  AOP 解决了以下问题：  切面逻辑编写繁琐，有多少个业务方法就需要编写多少次。  IOCIoC（Inverse of Control:控制反转） 是一种设计思想，而不是一个具体的技术实现。IoC 的思">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/upload/2021/12/%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B-c950bb7cfb934e40afd787386b3846d5.jpg">
+<meta property="article:published_time" content="2021-06-24T14:18:06.169Z">
+<meta property="article:modified_time" content="2022-07-18T08:40:15.274Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="spring">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/upload/2021/12/%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B-c950bb7cfb934e40afd787386b3846d5.jpg">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Spring基础</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wixhz">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&text=Spring基础"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&title=Spring基础"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&is_video=false&description=Spring基础"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Spring基础&body=Check out this article: http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&title=Spring基础"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&title=Spring基础"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&title=Spring基础"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&title=Spring基础"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&name=Spring基础&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&t=Spring基础"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#spring"><span class="toc-number">1.</span> <span class="toc-text">spring</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#IOC"><span class="toc-number">1.1.</span> <span class="toc-text">IOC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring%E4%B8%A4%E7%A7%8D%E7%B1%BB%E5%9E%8BBean"><span class="toc-number">1.1.1.</span> <span class="toc-text">Spring两种类型Bean</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ioc%E6%93%8D%E4%BD%9CBean%E7%AE%A1%E7%90%86-xml%E6%96%B9%E5%BC%8F"><span class="toc-number">1.1.2.</span> <span class="toc-text">ioc操作Bean管理(xml方式)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E8%A7%A3%E6%96%B9%E5%BC%8F"><span class="toc-number">1.1.3.</span> <span class="toc-text">注解方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AOP"><span class="toc-number">1.2.</span> <span class="toc-text">AOP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JDK%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86-java-lang-reflect-Proxy"><span class="toc-number">1.2.1.</span> <span class="toc-text">JDK动态代理(java.lang.reflect.Proxy)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AOP%E6%93%8D%E4%BD%9C-%E6%B3%A8%E8%A7%A3%E6%96%B9%E5%BC%8F"><span class="toc-number">1.2.2.</span> <span class="toc-text">AOP操作(注解方式)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JdbcTemplate"><span class="toc-number">1.3.</span> <span class="toc-text">JdbcTemplate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1"><span class="toc-number">1.4.</span> <span class="toc-text">事务</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">设计模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">工厂设计模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text">单例设计模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.3.</span> <span class="toc-text">代理设计模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95"><span class="toc-number">2.4.</span> <span class="toc-text">模板方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.5.</span> <span class="toc-text">适配器模式</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Spring基础
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-06-24T14:18:06.169Z" itemprop="datePublished">2021-06-24</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6/">框架</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/spring/" rel="tag">spring</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="spring"><a href="#spring" class="headerlink" title="spring"></a>spring</h1><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/RudeCrab/p/14365296.html">到底为什么要用 IoC 和 AOP</a><br>IoC 解决了以下问题：</p>
+<ol>
+<li>创建了许多重复对象，造成大量资源浪费；</li>
+<li>更换实现类需要改动多个地方；</li>
+<li>创建和配置组件工作繁杂，给组件调用方带来极大不便。</li>
+</ol>
+<p>AOP 解决了以下问题：</p>
+<ol>
+<li>切面逻辑编写繁琐，有多少个业务方法就需要编写多少次。</li>
+</ol>
+<h2 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h2><p>IoC（Inverse of Control:控制反转） 是一种设计思想，而不是一个具体的技术实现。IoC 的思想就是将原本在程序中手动创建对象的控制权，交由 Spring 框架来管理。IoC 容器实际上就是个 Map（key，value），Map 中存放的是各种对象。</p>
+<ul>
+<li><strong>控制</strong> ：指的是对象创建（实例化、管理）的权力</li>
+<li><strong>反转</strong> ：控制权交给外部环境（Spring 框架、IoC 容器）</li>
+</ul>
+<ol>
+<li>BeanFactory:  IOC容器基本实现，是spring内部的使用接口，不提供给开发人员使用<ul>
+<li>加载配置文件时不会创建对象，获取对象时采取创建对象。</li>
+</ul>
+</li>
+<li>ApplicationContext：  BeanFactory的子接口，提供更多的功能。<ul>
+<li>加载配置文件时候就会把对象创建</li>
+</ul>
+</li>
+</ol>
+<h3 id="Spring两种类型Bean"><a href="#Spring两种类型Bean" class="headerlink" title="Spring两种类型Bean"></a>Spring两种类型Bean</h3><ol>
+<li>普通Bean<br>配置文件中定义bean类型就是返回类型</li>
+<li>工厂Bean<br>配置文件中定义bean类型可以和返回类型不一样<br>(1)创建类，让这个类作为工厂bean，实现接口FactoryBean<br>(2)实现接口里的方法，在实现的方法中定义返回的bean类型</li>
+</ol>
+<h3 id="ioc操作Bean管理-xml方式"><a href="#ioc操作Bean管理-xml方式" class="headerlink" title="ioc操作Bean管理(xml方式)"></a>ioc操作Bean管理(xml方式)</h3><ol>
+<li><p>概念</p>
+<ul>
+<li>Spring创建对象</li>
+<li>Spring注入属性</li>
+</ul>
+</li>
+<li><p>管理方式</p>
+<ul>
+<li><p>基于xml配置文件方式实现<br>1. 无参构造方法实例化<br>        <bean id="userDao" class="com.it.dao.impl.UserDaoImp" init-method="init" destroy-method="destory"></bean><br><br>2. 工厂静态方法实例化<br>        <bean id="userDao" class="com.it.factory.StaticFactory" factory-method="getUserDao"></bean><br>3. 工厂实例方法实例化<br>        <bean id="factory" class="com.it.factory.DynamicFactory"></bean><br>        <bean id="userDao" factory-bean="factory" factory-method="getUserDao"></bean><br>#### Bean的依赖注入分析<br>将对象的依赖关系交给spring来实现，简单地说，就是坐等框架把持久层对象传入业务层，而不用自己去获取。<br>1. Bean的依赖注入方式<br>* 构造方法<br>        <bean id="userService" class="com.it.service.impl.UserServiceImpl"><br>        <constructor-arg name="userDao" ref="userDao"></constructor-arg><br>        </bean><br>* set方法<br>        <bean id="userDao" class="com.it.dao.impl.UserDaoImp" scope="prototype"></bean><br>        <bean id="userService" class="com.it.service.impl.UserServiceImpl"><br>        <property name="userDao" ref="userDao"></property><br>        </bean><br>2. Bean的依赖注入数据类型<br>   * 普通数据类型<br>   * 引用数据类型<br>   * 集合数据类型<br>   * CDATA:<br>      <![CDATA[   特殊的符号或字符    ]]></p>
+</li>
+<li><p>基于注解方式实现</p>
+</li>
+</ul>
+</li>
+<li><p>Bean作用域<br>单实例或者多实例<br>scope标签： single或prototype，request或session<br>         <!--    single时  加载xml文件即创建对象
+                           只要容器在 对象就一直在
+                           销毁容器时，对象销毁--><br>         <!--    prototype时   getbean创建对象
+                               使用就一直在--></p>
+</li>
+<li><p>Bean生命周期</p>
+<ol>
+<li>通过构造器创建Bean实例(无参数构造)</li>
+<li>为bean的属性设置值和其他bean引用</li>
+<li>把bean实例传递给bean后置处理器(接口：BeanPostProcessor)的方法postProcessBeforeInitialization</li>
+<li>调用bean的初始化方法(需要配置初始化的方法)</li>
+<li>把bean实例传递给bean后置处理器的方法postProcessAfterInitialization</li>
+<li>bean可以使用了</li>
+<li>当容器关闭时，调用bean的销毁方法(需要进行配置销毁的方法)</li>
+<li>自动装配:根据指定装配规则(属性名称和属性类型)，spring自动将匹配的属性值进行注入<!--autowire="byName"配置自动装配
+  autowire常用两个取值
+ byName根据属性名称注入，注入值bean的id值和类属性名称一样
+ byType根据属性注入
+--></li>
+</ol>
+</li>
+<li><p>外部属性文件</p>
+<ol>
+<li>直接配置数据库信息<br>(1)配置德鲁伊连接池<br>(2)导入jar包</li>
+<li>引用外部属性文件配置数据库连接<br>(1)引入context名称空间    xmlns:context&#x3D;”<a target="_blank" rel="noopener" href="http://www.springframework.org/schema/context">http://www.springframework.org/schema/context</a>“<br>(2)spring配置文件使用标签引入外部属性文件   &lt;context:property-placeholder location&#x3D;”classpath:path”&#x2F;&gt;<br>(3)bean标签中加入             <bean id="dataSourse" class="com.alibaba.druid.pool.DruidDataSource">
+  <property name="username" value="${username}"></property>
+  </bean></li>
+</ol>
+</li>
+</ol>
+<h3 id="注解方式"><a href="#注解方式" class="headerlink" title="注解方式"></a>注解方式</h3><ol>
+<li><p>Spring中针对Bean管理创建对象提供注解</p>
+<ul>
+<li>@Component</li>
+<li>@Service</li>
+<li>@Controller</li>
+<li>@Repository<br>注意： 上述四个注解功能一样，但是用于不同位置</li>
+</ul>
+</li>
+<li><p>基于注解方式实现对象创建</p>
+<ol>
+<li>引入依赖</li>
+<li>开启组件扫描<br>&lt;context:component-scan base-package&#x3D;”com.zhujie”&gt;</context:component-scan></li>
+<li>创建类，在类上添加对象注解<br>&#x2F;&#x2F;注解里面value值可以省略不写，<br>&#x2F;&#x2F;默认值是类名称，首字母小写<br>@Component(value &#x3D; “UserService”)   &#x2F;&#x2F;<bean id="UserService" class=""/></li>
+</ol>
+<ul>
+<li><!--   use-default-filters="false"表实不使用默认filter，自己配置filter
+       context:include-filter，设置扫描哪些内容
+   -->
+&lt;context:component-scan base-package&#x3D;”com.zhujie”&gt;</context:component-scan><br>&lt;context:component-scan base-package&#x3D;”com.zhujie” use-default-filters&#x3D;”false”&gt;<br>    &lt;context:include-filter type&#x3D;”annotation” expression&#x3D;”org.springframework.stereotype.Controller”&#x2F;&gt;<br></context:component-scan></li>
+<li><!--设置哪些内容不进行扫描-->
+&lt;context:component-scan base-package&#x3D;”com.zhujie”&gt;</context:component-scan><br>&lt;context:component-scan base-package&#x3D;”com.zhujie”&gt;<br>    &lt;context:exclude-filter type&#x3D;”annotation” expression&#x3D;”org.springframework.stereotype.Controller”&#x2F;&gt;<br></context:component-scan></li>
+</ul>
+</li>
+<li><p>基于注解方式实现属性注入</p>
+<ul>
+<li>@Autowired：根据属性类型进行自动装配</li>
+<li>@Qualifier：根据属性名称进行注入（与第一个联合使用）</li>
+<li>@Resourse：根据类型或名称注入</li>
+<li>@Value：注入普通类型</li>
+</ul>
+</li>
+<li><p>属性注入步骤</p>
+<ol>
+<li>创建对象</li>
+<li>在需要注入的属性上添加Autowired注解</li>
+</ol>
+</li>
+<li><p>完全注解开发<br>创建配置类，替代xml文件<br>   @Configuration  &#x2F;&#x2F;作为配置类，替代xml文件<br>   @ComponentScan(basePackages &#x3D; {“com.zhujie”})<br>   public class SpringConfig {<br>   }</p>
+</li>
+</ol>
+<h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><p>传统复用的都是核心业务逻辑，并不能复用一些辅助逻辑，比如：日志记录、性能统计、安全校验、事务管理，等等。这些边缘逻辑往往贯穿整个核心业务，传统 OOP 很难将其封装</p>
+<p>AOP 不是 OOP 的对立面，它是对 OOP 的一种补充。OOP 是纵向的，AOP 是横向的。AOP 技术，能够不修改原有代码，便能让切面逻辑在所有业务逻辑中生效。<br><img src="/upload/2021/12/%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B-c950bb7cfb934e40afd787386b3846d5.jpg" alt="面向切面编程.jpg"></p>
+<ol>
+<li>概念<br>面向切面(方面)编程，对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间耦合度降低，提高程序的可重用性。</li>
+<li>原理<br>aop底层使用动态代理<br>  1. 有接口情况，使用JDK动态代理<br>     创建接口实现类代理对象，增强类中的方法<br>  2. 无接口情况，使用CGLIB动态代理<br>     创建当前类子类的代理对象</li>
+<li>AOP(术语)<ol>
+<li>连接点:类中可以被增强的方法</li>
+<li>切入点:实际增强的方法</li>
+<li>通知(增强):<ul>
+<li>前置通知  before</li>
+<li>后置通知  afterreturning(有异常不执行)</li>
+<li>环绕通知  around</li>
+<li>异常通知  afterthrowing</li>
+<li>最终通知  after(有异常也执行)</li>
+</ul>
+</li>
+<li>切面:把通知应用到切入点过程</li>
+</ol>
+</li>
+</ol>
+<h3 id="JDK动态代理-java-lang-reflect-Proxy"><a href="#JDK动态代理-java-lang-reflect-Proxy" class="headerlink" title="JDK动态代理(java.lang.reflect.Proxy)"></a>JDK动态代理(java.lang.reflect.Proxy)</h3><p><code>static Object newProxyInstance(ClassLoader loader, Class&lt;?&gt;[] interfaces, InvocationHandler h) </code></p>
+<ol>
+<li>调用newProxyInstance方法<br>该方法有三个参数<ul>
+<li>类加载器</li>
+<li>增强方法所在的类，这个类实现的接口，支持多个接口</li>
+<li>实现接口InvocationHandler，创建代理对象，写增强的方法</li>
+</ul>
+</li>
+<li>创建接口实现类，实现方法</li>
+<li>使用Proxy类创建接口代理对象</li>
+</ol>
+<h3 id="AOP操作-注解方式"><a href="#AOP操作-注解方式" class="headerlink" title="AOP操作(注解方式)"></a>AOP操作(注解方式)</h3><ol>
+<li>Spring框架一般都是基于AspectJ实现AOP操作<ol>
+<li>什么是AspectJ<br>AspectJ不是Spring组成部分，独立于AOP框架，一般把两者结合使用进行aop操作</li>
+<li>基于AspectJ实现aop操作<ul>
+<li>xml方式</li>
+<li>注解方式</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>引入相关依赖</li>
+<li>进行通知的配置<ol>
+<li>在spring配置文件中，开启注释扫描</li>
+<li>使用注解创建User和UserProxy对象</li>
+<li>在增强类上添加注解@Aspect</li>
+<li>在spring配置文件中开启生成代理对象</li>
+</ol>
+</li>
+<li>配置不同类型的通知<ol>
+<li>在增强类的里面，在作为通知方法上添加通知类型注解，使用切入点表达式配置<ol>
+<li>切入点表达式:知道对哪个类里的哪个方法进行增强</li>
+<li>语法结构<ul>
+<li>execution([权限修饰符][返回类型(可省略)][类全路径][方法名称][参数列表])</li>
+<li>execution(* com.it.dao.BookDao.add())</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="JdbcTemplate"><a href="#JdbcTemplate" class="headerlink" title="JdbcTemplate"></a>JdbcTemplate</h2><ol>
+<li>概念<br>Spring框架对jdbc进行封装，使用JdbcTemplate可以方便的实现对数据库操作</li>
+<li>步骤<ol>
+<li>引入依赖</li>
+<li>在spring配置文件中配置数据库连接池</li>
+<li>配置JdbcTemplate对象，注入DataSourse</li>
+<li>创建service类，dao类，在dao注入JdbcTemplate对象</li>
+</ol>
+</li>
+</ol>
+<h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><ol>
+<li>概念<br>事务是数据库操作的最基本单元，逻辑上的一组操作，要么都成功，如果有一个失败所有操作都失败</li>
+<li>事务四个特性<ul>
+<li>原子性</li>
+<li>一致性</li>
+<li>隔离性</li>
+<li>持久性</li>
+</ul>
+</li>
+<li>在spring中进行事务管理操作<ol>
+<li>编程式事务管理和声明式事务管理</li>
+<li>spring中声明式事务管理，底层使用aop原理</li>
+</ol>
+</li>
+<li>spring事务管理相关api<ol>
+<li>提供一个接口PlatformTransactionManager，代表事务管理器，这个接口对不同框架提供不同实现类</li>
+</ol>
+</li>
+</ol>
+<h1 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h1><h2 id="工厂设计模式"><a href="#工厂设计模式" class="headerlink" title="工厂设计模式"></a>工厂设计模式</h2><p>Spring使用工厂模式可以通过 <code>BeanFactory</code> 或 <code>ApplicationContext</code> 创建 bean 对象。</p>
+<p><strong>两者对比：</strong></p>
+<ul>
+<li><code>BeanFactory</code> ：延迟注入(使用到某个 bean 的时候才会注入),相比于<code>BeanFactory</code>来说会占用更少的内存，程序启动速度更快。</li>
+<li><code>ApplicationContext</code> ：容器启动的时候，不管你用没用到，一次性创建所有 bean 。<code>BeanFactory</code> 仅提供了最基本的依赖注入支持，<code>ApplicationContext</code> 扩展了 <code>BeanFactory</code> ,除了有<code>BeanFactory</code>的功能还有额外更多功能，所以一般开发人员使用<code>ApplicationContext</code>会更多。</li>
+</ul>
+<h2 id="单例设计模式"><a href="#单例设计模式" class="headerlink" title="单例设计模式"></a>单例设计模式</h2><p>在系统中，有一些对象其实只需要一个，比如：线程池、缓存、对话框、注册表、日志对象、充当打印机、显卡等设备驱动程序的对象。</p>
+<p><strong>使用单例模式的好处:</strong></p>
+<ul>
+<li>对于频繁使用的对象，可以省略创建对象所花费的时间，这对于那些重量级对象而言，是非常可观的一笔系统开销；</li>
+<li>由于 new 操作的次数减少，因而对系统内存的使用频率也会降低，这将减轻 GC 压力，缩短 GC 停顿时间。</li>
+</ul>
+<p><strong>Spring 中 bean 的默认作用域就是 singleton(单例)的。</strong>Spring 中 bean 还有下面几种作用域：</p>
+<ul>
+<li>prototype : 每次请求都会创建一个新的 bean 实例。 </li>
+<li>request : 每一次HTTP请求都会产生一个新的bean，该bean仅在当前HTTP request内有效。 </li>
+<li>session : 每一次HTTP请求都会产生一个新的 bean，该bean仅在当前 HTTP session 内有效。 </li>
+<li>global-session： 全局session作用域，仅仅在基于portlet的web应用中才有意义，Spring5已经没有了。Portlet是能够生成语义代码(例如：HTML)片段的小型Java Web插件。它们基于portlet容器，可以像servlet一样处理HTTP请求。但是，与 servlet 不同，每个 portlet 都有不同的会话</li>
+</ul>
+<p>Spring 通过<code>ConcurrentHashMap</code>实现单例注册表的特殊方式实现单例模式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过 ConcurrentHashMap（线程安全） 实现单例注册表</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Object&gt; singletonObjects = <span class="keyword">new</span> <span class="title class_">ConcurrentHashMap</span>&lt;String, Object&gt;(<span class="number">64</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> Object <span class="title function_">getSingleton</span><span class="params">(String beanName, ObjectFactory&lt;?&gt; singletonFactory)</span> &#123;</span><br><span class="line">        Assert.notNull(beanName, <span class="string">&quot;&#x27;beanName&#x27; must not be null&quot;</span>);</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="built_in">this</span>.singletonObjects) &#123;</span><br><span class="line">            <span class="comment">// 检查缓存中是否存在实例  </span></span><br><span class="line">            <span class="type">Object</span> <span class="variable">singletonObject</span> <span class="operator">=</span> <span class="built_in">this</span>.singletonObjects.get(beanName);</span><br><span class="line">            <span class="keyword">if</span> (singletonObject == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="comment">//...省略了很多代码</span></span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    singletonObject = singletonFactory.getObject();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//...省略了很多代码</span></span><br><span class="line">                <span class="comment">// 如果实例对象不存在，就注册到单例注册表中。</span></span><br><span class="line">                addSingleton(beanName, singletonObject);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> (singletonObject != NULL_OBJECT ? singletonObject : <span class="literal">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//将对象添加到单例注册表</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">addSingleton</span><span class="params">(String beanName, Object singletonObject)</span> &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="built_in">this</span>.singletonObjects) &#123;</span><br><span class="line">                <span class="built_in">this</span>.singletonObjects.put(beanName, (singletonObject != <span class="literal">null</span> ? singletonObject : NULL_OBJECT));</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="代理设计模式"><a href="#代理设计模式" class="headerlink" title="代理设计模式"></a>代理设计模式</h2><p>使用 AOP 之后我们可以把一些通用功能抽象出来，在需要用到的地方直接使用即可，这样大大简化了代码量。我们需要增加新功能时也方便，这样也提高了系统扩展性。日志功能、事务管理等等场景都用到了 AOP 。</p>
+<h2 id="模板方法"><a href="#模板方法" class="headerlink" title="模板方法"></a>模板方法</h2><p>模板方法模式是一种行为设计模式，它定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。 模板方法使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤的实现方式。</p>
+<p>Spring 中 <code>jdbcTemplate</code>、<code>hibernateTemplate</code> 等以 Template 结尾的对数据库操作的类，它们就使用到了模板模式。一般情况下，我们都是使用继承的方式来实现模板模式</p>
+<h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><p>适配器模式(Adapter Pattern) 将一个接口转换成客户希望的另一个接口，适配器模式使接口不兼容的那些类可以一起工作，其别名为包装器(Wrapper)。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/wixhz">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#spring"><span class="toc-number">1.</span> <span class="toc-text">spring</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#IOC"><span class="toc-number">1.1.</span> <span class="toc-text">IOC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Spring%E4%B8%A4%E7%A7%8D%E7%B1%BB%E5%9E%8BBean"><span class="toc-number">1.1.1.</span> <span class="toc-text">Spring两种类型Bean</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ioc%E6%93%8D%E4%BD%9CBean%E7%AE%A1%E7%90%86-xml%E6%96%B9%E5%BC%8F"><span class="toc-number">1.1.2.</span> <span class="toc-text">ioc操作Bean管理(xml方式)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E8%A7%A3%E6%96%B9%E5%BC%8F"><span class="toc-number">1.1.3.</span> <span class="toc-text">注解方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AOP"><span class="toc-number">1.2.</span> <span class="toc-text">AOP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JDK%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86-java-lang-reflect-Proxy"><span class="toc-number">1.2.1.</span> <span class="toc-text">JDK动态代理(java.lang.reflect.Proxy)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#AOP%E6%93%8D%E4%BD%9C-%E6%B3%A8%E8%A7%A3%E6%96%B9%E5%BC%8F"><span class="toc-number">1.2.2.</span> <span class="toc-text">AOP操作(注解方式)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JdbcTemplate"><span class="toc-number">1.3.</span> <span class="toc-text">JdbcTemplate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1"><span class="toc-number">1.4.</span> <span class="toc-text">事务</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">设计模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%8E%82%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">工厂设计模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E4%BE%8B%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.2.</span> <span class="toc-text">单例设计模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.3.</span> <span class="toc-text">代理设计模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95"><span class="toc-number">2.4.</span> <span class="toc-text">模板方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.5.</span> <span class="toc-text">适配器模式</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&text=Spring基础"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&title=Spring基础"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&is_video=false&description=Spring基础"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Spring基础&body=Check out this article: http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&title=Spring基础"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&title=Spring基础"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&title=Spring基础"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&title=Spring基础"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&name=Spring基础&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/&t=Spring基础"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wixhz">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

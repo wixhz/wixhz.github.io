@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Gateway 简介Gateway是在Spring生态系统之上构建的API网关服务，基于Spring 5，Spring Boot 2和 Project Reactor等技术。Gateway旨在提供一种简单而有效的方式来对API进行路由，以及提供一些强大的过滤器功能， 例如：熔断、限流、重试等。 Spring Cloud Gateway 具有如下特性：  基于Spring Framework 5,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Cloud Gateway">
+<meta property="og:url" content="http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Gateway 简介Gateway是在Spring生态系统之上构建的API网关服务，基于Spring 5，Spring Boot 2和 Project Reactor等技术。Gateway旨在提供一种简单而有效的方式来对API进行路由，以及提供一些强大的过滤器功能， 例如：熔断、限流、重试等。 Spring Cloud Gateway 具有如下特性：  基于Spring Framework 5,">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-08-20T03:16:55.626Z">
+<meta property="article:modified_time" content="2021-12-05T13:03:18.517Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="spring gateway">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Spring Cloud Gateway</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wixhz">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2021/08/25/git%E4%BD%BF%E7%94%A8-git%E4%BD%BF%E7%94%A8/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2021/06/24/Spring%E5%9F%BA%E7%A1%80-spring%E5%9F%BA%E7%A1%80/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&text=Spring Cloud Gateway"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&title=Spring Cloud Gateway"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&is_video=false&description=Spring Cloud Gateway"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Spring Cloud Gateway&body=Check out this article: http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&title=Spring Cloud Gateway"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&title=Spring Cloud Gateway"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&title=Spring Cloud Gateway"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&title=Spring Cloud Gateway"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&name=Spring Cloud Gateway&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&t=Spring Cloud Gateway"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Gateway-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">Gateway 简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5"><span class="toc-number">2.</span> <span class="toc-text">相关概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Route-Predicate-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">4.</span> <span class="toc-text">Route Predicate 的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-Route-Predicate"><span class="toc-number">4.1.</span> <span class="toc-text">Before Route Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Between-Route-Predicate"><span class="toc-number">4.2.</span> <span class="toc-text">Between Route Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cookie-Route-Predicate"><span class="toc-number">4.3.</span> <span class="toc-text">Cookie Route Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Header-Route-Predicate"><span class="toc-number">4.4.</span> <span class="toc-text">Header Route Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Host-Route-Predicate"><span class="toc-number">4.5.</span> <span class="toc-text">Host Route Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method-Route-Predicate"><span class="toc-number">4.6.</span> <span class="toc-text">Method Route Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Path-Route-Predicate-%E5%B8%B8%E7%94%A8"><span class="toc-number">4.7.</span> <span class="toc-text">Path Route Predicate 常用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Query-Route-Predicate"><span class="toc-number">4.8.</span> <span class="toc-text">Query Route Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RemoteAddr-Route-Predicate"><span class="toc-number">4.9.</span> <span class="toc-text">RemoteAddr Route Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Weight-Route-Predicate"><span class="toc-number">4.10.</span> <span class="toc-text">Weight Route Predicate</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Route-Filter-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">5.</span> <span class="toc-text">Route Filter 的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#AddRequestParameter-GatewayFilter"><span class="toc-number">5.1.</span> <span class="toc-text">AddRequestParameter GatewayFilter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#StripPrefix-GatewayFilter"><span class="toc-number">5.2.</span> <span class="toc-text">StripPrefix GatewayFilter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PrefixPath-GatewayFilter"><span class="toc-number">5.3.</span> <span class="toc-text">PrefixPath GatewayFilter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hystrix-GatewayFilter"><span class="toc-number">5.4.</span> <span class="toc-text">Hystrix GatewayFilter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RequestRateLimiter-GatewayFilter"><span class="toc-number">5.5.</span> <span class="toc-text">RequestRateLimiter GatewayFilter</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%93%E5%90%88%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E4%BD%BF%E7%94%A8"><span class="toc-number">6.</span> <span class="toc-text">结合注册中心使用</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Spring Cloud Gateway
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-08-20T03:16:55.626Z" itemprop="datePublished">2021-08-20</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/%E6%A1%86%E6%9E%B6/">框架</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/spring-gateway/" rel="tag">spring gateway</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="Gateway-简介"><a href="#Gateway-简介" class="headerlink" title="Gateway 简介"></a>Gateway 简介</h1><p>Gateway是在Spring生态系统之上构建的API网关服务，基于Spring 5，Spring Boot 2和 Project Reactor等技术。Gateway旨在提供一种简单而有效的方式来对API进行路由，以及提供一些强大的过滤器功能， 例如：熔断、限流、重试等。</p>
+<p>Spring Cloud Gateway 具有如下特性：</p>
+<ul>
+<li>基于Spring Framework 5, Project Reactor 和 Spring Boot 2.0 进行构建；</li>
+<li>动态路由：能够匹配任何请求属性；</li>
+<li>可以对路由指定 Predicate（断言）和 Filter（过滤器）；</li>
+<li>集成Hystrix的断路器功能；</li>
+<li>集成 Spring Cloud 服务发现功能；</li>
+<li>易于编写的 Predicate（断言）和 Filter（过滤器）；</li>
+<li>请求限流功能；</li>
+<li>支持路径重写。</li>
+</ul>
+<h1 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h1><ul>
+<li>Route（路由）：路由是构建网关的基本模块，它由ID，目标URI，一系列的断言和过滤器组成，如果断言为true则匹配该路由；</li>
+<li>Predicate（断言）：指的是Java 8 的 Function Predicate。 输入类型是Spring框架中的ServerWebExchange。 这使开发人员可以匹配HTTP请求中的所有内容，例如请求头或请求参数。如果请求与断言相匹配，则进行路由；</li>
+<li>Filter（过滤器）：指的是Spring框架中GatewayFilter的实例，使用过滤器，可以在请求被路由前后对请求进行修改。</li>
+</ul>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><ol>
+<li><p>引入依赖</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-starter-gateway&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在application.yml中进行配置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  cloud:</span><br><span class="line">    gateway:</span><br><span class="line">      routes:</span><br><span class="line">        - id: path_route #路由的ID</span><br><span class="line">          uri: $&#123;service-url.user-service&#125;/user/&#123;id&#125; #匹配后路由地址</span><br><span class="line">          predicates: # 断言，路径相匹配的进行路由</span><br><span class="line">            - Path=/user/&#123;id&#125;</span><br><span class="line">          filters:</span><br><span class="line">            - StripPrefix=<span class="number">1</span> #去掉部分URL路径</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="Route-Predicate-的使用"><a href="#Route-Predicate-的使用" class="headerlink" title="Route Predicate 的使用"></a>Route Predicate 的使用</h1><p>多个Route Predicate工厂可以进行组合，下面我们来介绍下一些常用的Route Predicate。</p>
+<h2 id="Before-Route-Predicate"><a href="#Before-Route-Predicate" class="headerlink" title="Before Route Predicate"></a>Before Route Predicate</h2><p>在指定时间之后的请求会匹配该路由。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  cloud:</span><br><span class="line">    gateway:</span><br><span class="line">      routes:</span><br><span class="line">        - id: before_route</span><br><span class="line">          uri: $&#123;service-url.user-service&#125;</span><br><span class="line">          predicates:</span><br><span class="line">            - Before=<span class="number">2019</span>-09-24T16:<span class="number">30</span>:<span class="number">00</span>+08:<span class="number">00</span>[Asia/Shanghai]</span><br></pre></td></tr></table></figure>
+<h2 id="Between-Route-Predicate"><a href="#Between-Route-Predicate" class="headerlink" title="Between Route Predicate"></a>Between Route Predicate</h2><p>在指定时间区间内的请求会匹配该路由。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  cloud:</span><br><span class="line">    gateway:</span><br><span class="line">      routes:</span><br><span class="line">        - id: before_route</span><br><span class="line">          uri: $&#123;service-url.user-service&#125;</span><br><span class="line">          predicates:</span><br><span class="line">            - Between=<span class="number">2019</span>-09-24T16:<span class="number">30</span>:<span class="number">00</span>+08:<span class="number">00</span>[Asia/Shanghai], <span class="number">2019</span>-09-25T16:<span class="number">30</span>:<span class="number">00</span>+08:<span class="number">00</span>[Asia/Shanghai]</span><br></pre></td></tr></table></figure>
+<h2 id="Cookie-Route-Predicate"><a href="#Cookie-Route-Predicate" class="headerlink" title="Cookie Route Predicate"></a>Cookie Route Predicate</h2><p>带有指定Cookie的请求会匹配该路由。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  cloud:</span><br><span class="line">    gateway:</span><br><span class="line">      routes:</span><br><span class="line">        - id: cookie_route</span><br><span class="line">          uri: $&#123;service-url.user-service&#125;</span><br><span class="line">          predicates:</span><br><span class="line">            - Cookie=username,macro </span><br></pre></td></tr></table></figure>
+<h2 id="Header-Route-Predicate"><a href="#Header-Route-Predicate" class="headerlink" title="Header Route Predicate"></a>Header Route Predicate</h2><p>带有指定请求头的请求会匹配该路由。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  cloud:</span><br><span class="line">    gateway:</span><br><span class="line">      routes:</span><br><span class="line">      - id: header_route</span><br><span class="line">        uri: $&#123;service-url.user-service&#125;</span><br><span class="line">        predicates:</span><br><span class="line">        - Header=X-Request-Id, \d+</span><br></pre></td></tr></table></figure>
+<h2 id="Host-Route-Predicate"><a href="#Host-Route-Predicate" class="headerlink" title="Host Route Predicate"></a>Host Route Predicate</h2><p>带有指定Host的请求会匹配该路由。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  cloud:</span><br><span class="line">    gateway:</span><br><span class="line">      routes:</span><br><span class="line">        - id: host_route</span><br><span class="line">          uri: $&#123;service-url.user-service&#125;</span><br><span class="line">          predicates:</span><br><span class="line">            - Host=**.macrozheng.com</span><br></pre></td></tr></table></figure>
+<h2 id="Method-Route-Predicate"><a href="#Method-Route-Predicate" class="headerlink" title="Method Route Predicate"></a>Method Route Predicate</h2><p>发送指定方法的请求会匹配该路由。</p>
+<h2 id="Path-Route-Predicate-常用"><a href="#Path-Route-Predicate-常用" class="headerlink" title="Path Route Predicate 常用"></a>Path Route Predicate 常用</h2><p>发送指定路径的请求会匹配该路由。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  cloud:</span><br><span class="line">    gateway:</span><br><span class="line">      routes:</span><br><span class="line">        - id: path_route</span><br><span class="line">          uri: $&#123;service-url.user-service&#125;/user/&#123;id&#125;</span><br><span class="line">          predicates:</span><br><span class="line">            - Path=/user/&#123;id&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Query-Route-Predicate"><a href="#Query-Route-Predicate" class="headerlink" title="Query Route Predicate"></a>Query Route Predicate</h2><p>带指定查询参数的请求可以匹配该路由。</p>
+<h2 id="RemoteAddr-Route-Predicate"><a href="#RemoteAddr-Route-Predicate" class="headerlink" title="RemoteAddr Route Predicate"></a>RemoteAddr Route Predicate</h2><p>从指定远程地址发起的请求可以匹配该路由。</p>
+<h2 id="Weight-Route-Predicate"><a href="#Weight-Route-Predicate" class="headerlink" title="Weight Route Predicate"></a>Weight Route Predicate</h2><p>使用权重来路由相应请求，以下表示有80%的请求会被路由到localhost:8201，20%会被路由到localhost:8202。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  cloud:</span><br><span class="line">    gateway:</span><br><span class="line">      routes:</span><br><span class="line">      - id: weight_high</span><br><span class="line">        uri: http:<span class="comment">//localhost:8201</span></span><br><span class="line">        predicates:</span><br><span class="line">        - Weight=group1, <span class="number">8</span></span><br><span class="line">      - id: weight_low</span><br><span class="line">        uri: http:<span class="comment">//localhost:8202</span></span><br><span class="line">        predicates:</span><br><span class="line">        - Weight=group1, <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<h1 id="Route-Filter-的使用"><a href="#Route-Filter-的使用" class="headerlink" title="Route Filter 的使用"></a>Route Filter 的使用</h1><p>路由过滤器可用于修改进入的HTTP请求和返回的HTTP响应</p>
+<h2 id="AddRequestParameter-GatewayFilter"><a href="#AddRequestParameter-GatewayFilter" class="headerlink" title="AddRequestParameter GatewayFilter"></a>AddRequestParameter GatewayFilter</h2><p>给请求添加参数的过滤器。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  cloud:</span><br><span class="line">    gateway:</span><br><span class="line">      routes:</span><br><span class="line">        - id: add_request_parameter_route</span><br><span class="line">          uri: http:<span class="comment">//localhost:8201</span></span><br><span class="line">          filters:</span><br><span class="line">            - AddRequestParameter=username, macro</span><br><span class="line">          predicates:</span><br><span class="line">            - Method=GET</span><br></pre></td></tr></table></figure>
+<h2 id="StripPrefix-GatewayFilter"><a href="#StripPrefix-GatewayFilter" class="headerlink" title="StripPrefix GatewayFilter"></a>StripPrefix GatewayFilter</h2><p>对指定数量的路径前缀进行去除的过滤器。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">gateway:</span></span><br><span class="line">      <span class="attr">routes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">strip_prefix_route</span></span><br><span class="line">        <span class="attr">uri:</span> <span class="string">http://localhost:8201</span></span><br><span class="line">        <span class="attr">predicates:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">Path=/user-service/**</span></span><br><span class="line">        <span class="attr">filters:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">StripPrefix=2</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>以上配置会把以&#x2F;user-service&#x2F;开头的请求的路径去除两位，通过curl工具使用以下命令进行测试。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost:9201/user-service/a/user/1</span><br></pre></td></tr></table></figure>
+<p>相当于发起该请求：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost:8201/user/1</span><br></pre></td></tr></table></figure>
+<h2 id="PrefixPath-GatewayFilter"><a href="#PrefixPath-GatewayFilter" class="headerlink" title="PrefixPath GatewayFilter"></a>PrefixPath GatewayFilter</h2><p>与StripPrefix过滤器恰好相反，会对原有路径进行增加操作的过滤器。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">gateway:</span></span><br><span class="line">      <span class="attr">routes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">prefix_path_route</span></span><br><span class="line">        <span class="attr">uri:</span> <span class="string">http://localhost:8201</span></span><br><span class="line">        <span class="attr">predicates:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">Method=GET</span></span><br><span class="line">        <span class="attr">filters:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">PrefixPath=/user</span></span><br></pre></td></tr></table></figure>
+<p>以上配置会对所有GET请求添加&#x2F;user路径前缀</p>
+<h2 id="Hystrix-GatewayFilter"><a href="#Hystrix-GatewayFilter" class="headerlink" title="Hystrix GatewayFilter"></a>Hystrix GatewayFilter</h2><p>Hystrix 过滤器允许你将断路器功能添加到网关路由中，使你的服务免受级联故障的影响，并提供服务降级处理。<br><em><strong>TODO</strong></em></p>
+<h2 id="RequestRateLimiter-GatewayFilter"><a href="#RequestRateLimiter-GatewayFilter" class="headerlink" title="RequestRateLimiter GatewayFilter"></a>RequestRateLimiter GatewayFilter</h2><p>RequestRateLimiter 过滤器可以用于限流，使用RateLimiter实现来确定是否允许当前请求继续进行，如果请求太大默认会返回HTTP 429-太多请求状态。<br><em><strong>TODO</strong></em></p>
+<h1 id="结合注册中心使用"><a href="#结合注册中心使用" class="headerlink" title="结合注册中心使用"></a>结合注册中心使用</h1><p>在结合注册中心使用过滤器的时候，我们需要注意的是uri的协议为lb，这样才能启用Gateway的负载均衡功能。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">gateway:</span></span><br><span class="line">      <span class="attr">routes:</span> <span class="comment">#配置路由路径</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">mall-auth</span></span><br><span class="line">          <span class="attr">uri:</span> <span class="string">lb://mall-auth</span></span><br><span class="line">          <span class="attr">predicates:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">Path=/mall-auth/**</span></span><br><span class="line">          <span class="attr">filters:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">StripPrefix=1</span> <span class="comment">#去掉部分URL路径</span></span><br></pre></td></tr></table></figure>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/wixhz">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Gateway-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">Gateway 简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5"><span class="toc-number">2.</span> <span class="toc-text">相关概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Route-Predicate-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">4.</span> <span class="toc-text">Route Predicate 的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-Route-Predicate"><span class="toc-number">4.1.</span> <span class="toc-text">Before Route Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Between-Route-Predicate"><span class="toc-number">4.2.</span> <span class="toc-text">Between Route Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cookie-Route-Predicate"><span class="toc-number">4.3.</span> <span class="toc-text">Cookie Route Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Header-Route-Predicate"><span class="toc-number">4.4.</span> <span class="toc-text">Header Route Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Host-Route-Predicate"><span class="toc-number">4.5.</span> <span class="toc-text">Host Route Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method-Route-Predicate"><span class="toc-number">4.6.</span> <span class="toc-text">Method Route Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Path-Route-Predicate-%E5%B8%B8%E7%94%A8"><span class="toc-number">4.7.</span> <span class="toc-text">Path Route Predicate 常用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Query-Route-Predicate"><span class="toc-number">4.8.</span> <span class="toc-text">Query Route Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RemoteAddr-Route-Predicate"><span class="toc-number">4.9.</span> <span class="toc-text">RemoteAddr Route Predicate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Weight-Route-Predicate"><span class="toc-number">4.10.</span> <span class="toc-text">Weight Route Predicate</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Route-Filter-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">5.</span> <span class="toc-text">Route Filter 的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#AddRequestParameter-GatewayFilter"><span class="toc-number">5.1.</span> <span class="toc-text">AddRequestParameter GatewayFilter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#StripPrefix-GatewayFilter"><span class="toc-number">5.2.</span> <span class="toc-text">StripPrefix GatewayFilter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PrefixPath-GatewayFilter"><span class="toc-number">5.3.</span> <span class="toc-text">PrefixPath GatewayFilter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hystrix-GatewayFilter"><span class="toc-number">5.4.</span> <span class="toc-text">Hystrix GatewayFilter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RequestRateLimiter-GatewayFilter"><span class="toc-number">5.5.</span> <span class="toc-text">RequestRateLimiter GatewayFilter</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%93%E5%90%88%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E4%BD%BF%E7%94%A8"><span class="toc-number">6.</span> <span class="toc-text">结合注册中心使用</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&text=Spring Cloud Gateway"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&title=Spring Cloud Gateway"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&is_video=false&description=Spring Cloud Gateway"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Spring Cloud Gateway&body=Check out this article: http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&title=Spring Cloud Gateway"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&title=Spring Cloud Gateway"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&title=Spring Cloud Gateway"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&title=Spring Cloud Gateway"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&name=Spring Cloud Gateway&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/08/20/Spring%20Cloud%20Gateway-springcloudgateway/&t=Spring Cloud Gateway"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wixhz">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

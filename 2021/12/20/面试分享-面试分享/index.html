@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="http与httpshttp的缺点：  通信使用明文（不加密），内容可能会被窃听 不验证通信方的身份，因此有可能遭遇伪装 无法证明报文的完整性，所以有可能已遭篡改  用 SSL建立安全通信线路之后，就可以在这条线路上进行HTTP通信了。HTTP+ 加密 + 认证 + 完整性保护&#x3D;HTTPS，简言之，所谓 HTTPS，其实就是身披SSL协议这层外壳的 HTTP。 加密方式：  加密和解密同">
+<meta property="og:type" content="article">
+<meta property="og:title" content="面试分享">
+<meta property="og:url" content="http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="http与httpshttp的缺点：  通信使用明文（不加密），内容可能会被窃听 不验证通信方的身份，因此有可能遭遇伪装 无法证明报文的完整性，所以有可能已遭篡改  用 SSL建立安全通信线路之后，就可以在这条线路上进行HTTP通信了。HTTP+ 加密 + 认证 + 完整性保护&#x3D;HTTPS，简言之，所谓 HTTPS，其实就是身披SSL协议这层外壳的 HTTP。 加密方式：  加密和解密同">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/upload/2022/01/https%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86-a4d70d3bf2534a4cb742d08f83206e39.png">
+<meta property="article:published_time" content="2021-12-20T03:32:48.885Z">
+<meta property="article:modified_time" content="2022-08-10T09:37:15.802Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/upload/2022/01/https%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86-a4d70d3bf2534a4cb742d08f83206e39.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>面试分享</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wixhz">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2021/12/29/java%E5%AE%B9%E5%99%A8-java%E5%AE%B9%E5%99%A8/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2021/12/11/JUC-juc/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&text=面试分享"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&title=面试分享"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&is_video=false&description=面试分享"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=面试分享&body=Check out this article: http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&title=面试分享"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&title=面试分享"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&title=面试分享"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&title=面试分享"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&name=面试分享&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&t=面试分享"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#http%E4%B8%8Ehttps"><span class="toc-number">1.</span> <span class="toc-text">http与https</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cookie%E5%92%8Csession"><span class="toc-number">2.</span> <span class="toc-text">cookie和session</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http%E7%8A%B6%E6%80%81%E7%A0%81%E5%90%AB%E4%B9%89"><span class="toc-number">3.</span> <span class="toc-text">http状态码含义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%AD%BB%E9%94%81"><span class="toc-number">4.</span> <span class="toc-text">数据库死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spring%E7%9A%84aop%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%9A%84"><span class="toc-number">5.</span> <span class="toc-text">spring的aop是什么？如何实现的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="toc-number">6.</span> <span class="toc-text">面向对象的设计原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E5%8F%98%E9%87%8F%E5%8F%AF%E4%BB%A5%E6%98%AFGC-root-%E5%90%97"><span class="toc-number">7.</span> <span class="toc-text">实例变量可以是GC root 吗</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mybatis-%E5%92%8C-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">8.</span> <span class="toc-text">Mybatis # 和 $ 的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql"><span class="toc-number">9.</span> <span class="toc-text">mysql</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        面试分享
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-12-20T03:32:48.885Z" itemprop="datePublished">2021-12-20</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/java%E5%9F%BA%E7%A1%80/">java基础</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="http与https"><a href="#http与https" class="headerlink" title="http与https"></a>http与https</h2><p><strong>http的缺点：</strong></p>
+<ul>
+<li>通信使用明文（不加密），内容可能会被窃听</li>
+<li>不验证通信方的身份，因此有可能遭遇伪装</li>
+<li>无法证明报文的完整性，所以有可能已遭篡改</li>
+</ul>
+<p>用 SSL建立<strong>安全通信线路</strong>之后，就可以在这条线路上进行HTTP通信了。<br><strong>HTTP+ 加密 + 认证 + 完整性保护&#x3D;HTTPS</strong>，简言之，所谓 HTTPS，其实就是身披SSL协议这层外壳的 HTTP。</p>
+<p><strong>加密方式：</strong></p>
+<ul>
+<li>加密和解密同用一个密钥的方式称为共享密钥加密，也被叫做<strong>对称加密</strong>。</li>
+<li>公开密钥加密使用一对<strong>非对称</strong>的密钥。一把叫做私有密钥，另一把叫做公开密钥。顾名思义，私有密钥不能让其他任何人知道，而公开密钥则可以随意发布，任何人都可以获得。</li>
+</ul>
+<p>HTTPS 采用共享密钥加密和公开密钥加密两者并用的混合加密机制。</p>
+<p>公开密钥加密方式还是存在一些问题的，那就是无法证明公开密钥本身就是货真价实的公开密钥。为了解决上述问题，可以使用由数字证书认证机构和其相关机关颁发的公开密钥证书。<br><img src="/upload/2022/01/https%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86-a4d70d3bf2534a4cb742d08f83206e39.png" alt="https非对称加密.png"><br>首先服务器把经过认证机构的公开密钥发送给客户端，客户端对接收到的密钥进行验证，接着使用该密钥把对称加密的密钥加密后发送给服务器，接下来的通信过程都使用对称加密进行。</p>
+<h2 id="cookie和session"><a href="#cookie和session" class="headerlink" title="cookie和session"></a>cookie和session</h2><blockquote>
+<p>转载 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/ityouknow/p/10856177.html">cookie和session</a></p>
+</blockquote>
+<p>HTTP Cookie（也叫 Web Cookie或浏览器 Cookie）是服务器发送到用户浏览器并保存在本地的一小块数据，它会在浏览器下次向同一服务器再发起请求时被携带并发送到服务器上。通常，它用于告知服务端两个请求是否来自同一浏览器，如保持用户的登录状态。Cookie 使基于无状态的 HTTP 协议记录稳定的状态信息成为了可能。</p>
+<p>Cookie 主要用于以下三个方面：</p>
+<ul>
+<li>会话状态管理（如用户登录状态、购物车、游戏分数或其它需要记录的信息）</li>
+<li>个性化设置（如用户自定义设置、主题等）</li>
+<li>浏览器行为跟踪（如跟踪分析用户行为等）</li>
+</ul>
+<p>Session 代表着服务器和客户端一次会话的过程。Session 对象存储特定用户会话所需的属性及配置信息。这样，当用户在应用程序的 Web 页之间跳转时，存储在 Session 对象中的变量将不会丢失，而是在整个用户会话中一直存在下去。当客户端关闭会话，或者 Session 超时失效时会话结束。</p>
+<h2 id="http状态码含义"><a href="#http状态码含义" class="headerlink" title="http状态码含义"></a>http状态码含义</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/b58025e61b2d">状态码</a></p>
+</blockquote>
+<h2 id="数据库死锁"><a href="#数据库死锁" class="headerlink" title="数据库死锁"></a>数据库死锁</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_16681169/article/details/74784193">数据库死锁解决</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wezheng/p/8366029.html">https://www.cnblogs.com/wezheng/p/8366029.html</a></p>
+</blockquote>
+<h2 id="spring的aop是什么？如何实现的"><a href="#spring的aop是什么？如何实现的" class="headerlink" title="spring的aop是什么？如何实现的"></a>spring的aop是什么？如何实现的</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://javaguide.cn/system-design/framework/spring/spring-knowledge-and-questions-summary/#%E8%B0%88%E8%B0%88%E8%87%AA%E5%B7%B1%E5%AF%B9%E4%BA%8E-aop-%E7%9A%84%E4%BA%86%E8%A7%A3">aop</a></p>
+</blockquote>
+<h2 id="面向对象的设计原则"><a href="#面向对象的设计原则" class="headerlink" title="面向对象的设计原则"></a>面向对象的设计原则</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/songgj/p/11297016.html">设计原则</a></p>
+</blockquote>
+<h2 id="实例变量可以是GC-root-吗"><a href="#实例变量可以是GC-root-吗" class="headerlink" title="实例变量可以是GC root 吗"></a>实例变量可以是GC root 吗</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/129607250">什么是被 GC Roots 直接引用的对象</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_38007185/article/details/108093716">GC Roots 是什么</a></p>
+</blockquote>
+<h2 id="Mybatis-和-的区别"><a href="#Mybatis-和-的区别" class="headerlink" title="Mybatis # 和 $ 的区别"></a>Mybatis # 和 $ 的区别</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904017269620744">Mybatis中#{}与${}的区别</a></p>
+</blockquote>
+<h2 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h2><p>1.MySQL事物有哪些特性?</p>
+<p>2.简述一下MySQL事务两阶段提交的过程及故障恢复的过程？</p>
+<p>3.MySQL事物隔离级别有哪几种？分别有哪些特性</p>
+<p>4.描述一下MVCC的原理</p>
+<p>5.InnoDB引擎有哪些特性及原理是什么</p>
+<p>6.描述一下InnoDB Buffer  pool的工作机制以及有哪些逻辑链表，其中LRU链表的算法的原理是什么</p>
+<p>7.描述一下Index Condition Pushdown(ICP)、Multi-Range Read (MRR)的原理及适用的场景</p>
+<p>8.描述一下B树及B+树各自的优缺点？</p>
+<p>9.什么情况下MySQL的索引”失效”不可用？</p>
+<p>10.举几个你遇到的MySQL中的隐式转换案例</p>
+<p>11.描述一下一条update sql语句在MySQL内部执行的过程？</p>
+<p>12.MySQL执行sql时一个表只能用到一个索引吗？</p>
+<p>13.描述一下MySQL多表关联中Join的算法的原理</p>
+<p>14.MySQL常用的SQL调优手段或工具有哪些？</p>
+<p>15.MySQL的启动方式有哪些？ 这几种启动方式间有什么关系</p>
+<p>16.MySQL为什么需要设置双1才能保证主从数据的一致性？</p>
+<p>17.描述一下主从复制模式after_sync与after_commit的原理及优缺点</p>
+<p>18.描述一下主从复制的原理及SQL_thread对索引的利用</p>
+<p>19.如果线上从库延迟时间太久，如何快速恢复延迟</p>
+<p>20.show slave status状态中second behind计算方式</p>
+<p>21.主从复制线程均正常（为Yes，也没报错），Master的binlog已到binlog.00080，但slave上看到Master_Log_File却只到binlog.00070，可能的原因有哪些?</p>
+<p>22.在主从服务器上，同一个表的表空间文件大小相差特别大，可能原因是什么，怎么解决？</p>
+<p>23.描述一下MySQL并行复制的原理及5.6、5.7版本并行复制的区别</p>
+<p>24.MySQL GTID工作原理及不支持的操作</p>
+<p>25.MHA、MGR、PXC各自的优缺点及使用场景，简述一下MGR的数据同步原理</p>
+<p>26.创建表的各种规范</p>
+<p>27.MySQL 数据库CPU使用率突然升到100%该如何处理</p>
+<p>28.MySQL有哪些行锁，是如何解决幻读的？</p>
+<p>29.explain出来的各种item的意义</p>
+<p>30.用xtrabackup做mysql物理备份，建议授予哪些权限？</p>
+<p>31.监控MySQL的性能，应该主要观察那几个监控项？</p>
+<p>32 MySQL 8.0有哪些新特性？</p>
+<p>33.项目选型中确定要使用MySQL，你做为MySQL DBA需要准备什么?</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/wixhz">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#http%E4%B8%8Ehttps"><span class="toc-number">1.</span> <span class="toc-text">http与https</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cookie%E5%92%8Csession"><span class="toc-number">2.</span> <span class="toc-text">cookie和session</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http%E7%8A%B6%E6%80%81%E7%A0%81%E5%90%AB%E4%B9%89"><span class="toc-number">3.</span> <span class="toc-text">http状态码含义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%AD%BB%E9%94%81"><span class="toc-number">4.</span> <span class="toc-text">数据库死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#spring%E7%9A%84aop%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%9A%84"><span class="toc-number">5.</span> <span class="toc-text">spring的aop是什么？如何实现的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="toc-number">6.</span> <span class="toc-text">面向对象的设计原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E5%8F%98%E9%87%8F%E5%8F%AF%E4%BB%A5%E6%98%AFGC-root-%E5%90%97"><span class="toc-number">7.</span> <span class="toc-text">实例变量可以是GC root 吗</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mybatis-%E5%92%8C-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">8.</span> <span class="toc-text">Mybatis # 和 $ 的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql"><span class="toc-number">9.</span> <span class="toc-text">mysql</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&text=面试分享"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&title=面试分享"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&is_video=false&description=面试分享"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=面试分享&body=Check out this article: http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&title=面试分享"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&title=面试分享"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&title=面试分享"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&title=面试分享"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&name=面试分享&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2021/12/20/%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB-%E9%9D%A2%E8%AF%95%E5%88%86%E4%BA%AB/&t=面试分享"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2023
+    John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/wixhz">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
