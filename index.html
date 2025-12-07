@@ -148,7 +148,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -176,6 +176,96 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://wixhz.github.io/2025/09/20/%E4%B8%80%E6%96%87%E8%AF%B4%E6%B8%85%E7%BA%BF%E7%A8%8B%E7%BC%93%E5%AD%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="韶光易逝，劝君惜取少年时">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | null">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/09/20/%E4%B8%80%E6%96%87%E8%AF%B4%E6%B8%85%E7%BA%BF%E7%A8%8B%E7%BC%93%E5%AD%98/" class="post-title-link" itemprop="url">一文说清线程缓存</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2025-09-20 11:40:00" itemprop="dateCreated datePublished" datetime="2025-09-20T11:40:00+08:00">2025-09-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2025-12-07 22:06:49" itemprop="dateModified" datetime="2025-12-07T22:06:49+08:00">2025-12-07</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="什么是线程缓存以及为什么要用到线程缓存？"><a href="#什么是线程缓存以及为什么要用到线程缓存？" class="headerlink" title="什么是线程缓存以及为什么要用到线程缓存？"></a>什么是线程缓存以及为什么要用到线程缓存？</h1><p>每个线程都有独立的存储空间，使得相同的变量在不同线程中能够有不同的值，互不影响，每个变量只在当前线程中使用。简单来说就是<strong>多线程环境下解决线程安全问题的工具</strong>。</p>
+<p>线程缓存相比于其他缓存，具有以下优点：</p>
+<ul>
+<li><strong>性能更优</strong>，直接存于线程变量副本中，没有其他 IO 开销，同时避免了锁同步的开销</li>
+<li><strong>数据隔离</strong>，多线程中天然不存在竞争，保证每个线程对数据的修改不会影响其他线程中的变量</li>
+<li><strong>简化代码</strong>，需要在多个层次的调用中传递数据的场景中，使用线程缓存可以简化参数传递逻辑，避免在方法调用中显式传递参数，从而提高代码的可读性（<strong>双刃剑</strong>）。</li>
+</ul>
+<p>线程缓存典型的使用场景：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/09/20/%E4%B8%80%E6%96%87%E8%AF%B4%E6%B8%85%E7%BA%BF%E7%A8%8B%E7%BC%93%E5%AD%98/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -974,108 +1064,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/07/13/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://wixhz.github.io/2022/04/14/Spring/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="韶光易逝，劝君惜取少年时">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | null">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/04/14/Spring/" class="post-title-link" itemprop="url">spring</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">Posted on</span>
-
-      <time title="Created: 2022-04-14 15:06:10" itemprop="dateCreated datePublished" datetime="2022-04-14T15:06:10+08:00">2022-04-14</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2023-02-21 21:47:52" itemprop="dateModified" datetime="2023-02-21T21:47:52+08:00">2023-02-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">In</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">框架</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h1><p>IoC（Inverse of Control:控制反转） 是一种设计思想，而不是一个具体的技术实现。IoC 的思想就是将原本在程序中手动创建对象的控制权，交由 Spring 框架来管理。IoC 容器实际上就是个 Map（key，value），Map 中存放的是各种对象。</p>
-<ul>
-<li>控制 ：指的是对象创建（实例化、管理）的权力</li>
-<li>反转 ：控制权交给外部环境（Spring 框架、IoC 容器）</li>
-</ul>
-<p>IOC 解决了以下问题：</p>
-<ol>
-<li>创建了许多重复对象，造成大量资源浪费；</li>
-<li>更换实现类需要改动多个地方；</li>
-<li>创建和配置组件工作繁杂，给组件调用方带来极大不便。</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/04/14/Spring/#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
